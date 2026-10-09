@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* From the Figma variable collection, "light" mode. */
+:root {
+  --background: #faf9f6;
+  --navbar: #f3f1ed;
+  --text-black: #000000;
+  --dark-brown-text: #492f1e;
+  --light-brown-text: #835d44;
+  --light-green: #839958;
+  --dark-green: #3e4716;
+  --pink: #d3869c;
+  --peachy: #e8c2ac;
+  --gray-dark-green: #6d705f;
+  --gray-light-green: #6a705f;
+  --black-dark-green: #242719;
+  --black-light-green: #222719;
+  --gray-pink: #705f64;
+  --black-pink: #27191d;
+  --rule: rgba(62, 71, 22, 0.2);
+  --tint: rgba(62, 71, 22, 0.1);
+  --media: rgba(109, 112, 95, 0.39);
+  --text-white: #ffffff;
+  --on-accent: var(--text-white);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  /* From the Figma variable collection, "dark" mode. */
+  --background: #1c1714;
+  --navbar: #27201c;
+  --text-black: #ffffff;
+  --text-white: #000000;
+  --dark-brown-text: #d8c5b6;
+  --light-brown-text: #bb957c;
+  --light-green: #9eae6f;
+  --dark-green: #5d7d3b;
+  --pink: #d3869c;
+  --peachy: #c64f71;
+  --gray-dark-green: #9c9f8e;
+  --gray-light-green: #999f8e;
+  --black-dark-green: #e2e5d7;
+  --black-light-green: #e0e5d7;
+  --gray-pink: #9f8e93;
+  --black-pink: #e5d7db;
+  /* Not in the collection — derived from the tokens above. */
+  --rule: rgba(250, 249, 246, 0.16);
+  --tint: rgba(158, 174, 111, 0.12);
+  --media: rgba(156, 159, 142, 0.18);
+  --on-accent: var(--text-white);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-navbar: var(--navbar);
+  --color-ink: var(--text-black);
+  --color-brown: var(--dark-brown-text);
+  --color-brown-light: var(--light-brown-text);
+  --color-green-light: var(--light-green);
+  --color-green-dark: var(--dark-green);
+  --color-pink: var(--pink);
+  --color-peach: var(--peachy);
+  --color-sage: var(--gray-dark-green);
+  --color-sage-2: var(--gray-light-green);
+  --color-ink-green: var(--black-dark-green);
+  --color-ink-green-2: var(--black-light-green);
+  --color-mauve: var(--gray-pink);
+  --color-ink-pink: var(--black-pink);
+  --color-rule: var(--rule);
+  --color-tint: var(--tint);
+  --color-media: var(--media);
+  --color-on-accent: var(--on-accent);
+
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-caption: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background font-sans text-ink antialiased;
+    /* Figma sets every DM Sans / Bricolage layer to opsz 14, wdth 100. */
+    font-variation-settings: "opsz" 14, "wdth" 100;
+  }
+  [id] {
+    scroll-margin-top: 110px;
+  }
+}
+
+@utility opsz-9 {
+  font-variation-settings: "opsz" 9, "wdth" 100;
+}
+
+/* Smoothly cross-fade every colour while the theme is switching. */
+.theme-switching *:not(.keep-transition),
+.theme-switching *:not(.keep-transition)::before,
+.theme-switching *:not(.keep-transition)::after {
+  transition:
+    background-color 450ms ease,
+    border-color 450ms ease,
+    color 450ms ease,
+    opacity 450ms ease,
+    text-decoration-color 450ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+  }
+}

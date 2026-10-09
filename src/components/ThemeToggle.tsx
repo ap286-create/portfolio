@@ -42,13 +42,13 @@ export function ThemeToggle({ vertical = false }: { vertical?: boolean }) {
           height={24}
           className={`keep-transition absolute top-[3px] left-[3px] transition-[opacity,rotate] duration-500 ${isDark ? 'rotate-90 opacity-0' : 'rotate-0 opacity-100'}`}
         />
-        {/* Figma rotates the moon 90° inside the knob */}
+        {/* Figma rotates the moon 90° to cancel the vertical navbar's -90°; upright when horizontal */}
         <img
           src={moon}
           alt=""
           width={24}
           height={24}
-          className={`keep-transition absolute top-[3px] left-[3px] transition-[opacity,rotate] duration-500 ${isDark ? 'rotate-90 opacity-100' : 'rotate-0 opacity-0'}`}
+          className={`keep-transition absolute top-[3px] left-[3px] transition-[opacity,rotate] duration-500 ${isDark ? `${vertical ? 'rotate-90' : 'rotate-0'} opacity-100` : `${vertical ? 'rotate-0' : '-rotate-90'} opacity-0`}`}
         />
       </span>
     </button>

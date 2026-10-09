@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MaskIcon } from './ui'
 import slideMask from '../assets/icons/slide-mask.svg'
 import arrowLeft from '../assets/icons/arrow-left.svg'
@@ -44,10 +44,29 @@ export function Carousel() {
   const [active, setActive] = useState(0)
   const n = PHOTOS.length
   const go = (i: number) => setActive(((i % n) + n) % n)
+  const [paused, setPaused] = useState(false)
+
+  // Auto-advance every 4s; the timer restarts after any manual change, and pauses
+  // while hovered/focused or for visitors who prefer reduced motion.
+  useEffect(() => {
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(() => {
+      if (!document.hidden) setActive((a) => (a + 1) % n)
+    }, 4000)
+    return () => window.clearInterval(id)
+  }, [active, paused, n])
   const touchX = useRef<number | null>(null)
 
   return (
-    <section aria-roledescription="carousel" aria-label="Photos" className="flex w-full flex-col items-center gap-[18px] md:px-16">
+    <section
+      aria-roledescription="carousel"
+      aria-label="Photos"
+      className="flex w-full flex-col items-center gap-[18px] md:px-16"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       <div
         className="relative aspect-[876/404] w-full max-w-[876px] select-none"
         style={{ maskImage: `url("${slideMask}")`, WebkitMaskImage: `url("${slideMask}")`, maskSize: '100% 100%', WebkitMaskSize: '100% 100%' }}
@@ -71,7 +90,7 @@ export function Carousel() {
               aria-hidden={!s.o}
               aria-label={isCenter ? photo.caption : `Show photo: ${photo.caption}`}
               onClick={() => go(i)}
-              className={`absolute overflow-hidden rounded-[min(40px,4.6vw)] bg-white transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)] ${isCenter ? 'cursor-default' : 'cursor-pointer'}`}
+              className={`absolute overflow-hidden rounded-[min(40px,4.6vw)] bg-white transition-all duration-300 ease-out ${isCenter ? 'cursor-default' : 'cursor-pointer'}`}
               style={{ left: pct(s.x, BOX_W), top: pct(s.y, BOX_H), width: pct(s.w, BOX_W), height: pct(s.h, BOX_H), zIndex: s.z, opacity: s.o }}
             >
               <img src={photo.src} alt={photo.caption} draggable={false} className="pointer-events-none size-full object-cover" />

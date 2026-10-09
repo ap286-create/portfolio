@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { HoverName, MaskIcon } from '../components/ui'
 import { RESUME_URL } from '../data/site'
@@ -12,6 +13,30 @@ const NAV = [
 const navWord =
   'font-display font-semibold leading-none text-[clamp(40px,9vw,76px)] lg:text-[clamp(48px,5.3vw,76px)] decoration-[0.06em] underline-offset-[0.12em] hover:underline focus-visible:underline focus-visible:outline-none'
 
+// Figma "role" component: swe → pm → pd → wd → uid → uir, advancing every 3s.
+const ROLES = ['SOFTWARE ENGINEER', 'PRODUCT MANAGEMENT', 'PRODUCT DESIGN', 'WEB DEVELOPMENT', 'UI/UX DESIGN', 'UI/UX RESEARCH']
+
+function RoleTicker() {
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    const id = window.setInterval(() => setI((n) => (n + 1) % ROLES.length), 3000)
+    return () => window.clearInterval(id)
+  }, [])
+  return (
+    <p className="grid text-[14px] text-brown" aria-label={ROLES.join(', ').toLowerCase()}>
+      {ROLES.map((role, n) => (
+        <span
+          key={role}
+          aria-hidden
+          className={`col-start-1 row-start-1 transition-opacity duration-300 ease-in ${n === i ? 'opacity-100' : 'opacity-0'}`}
+        >
+          {role}
+        </span>
+      ))}
+    </p>
+  )
+}
+
 /** Figma "Home - light" (23:3). */
 export default function Home() {
   return (
@@ -24,7 +49,7 @@ export default function Home() {
           <p className="text-[clamp(18px,2vw,21px)] leading-[1.45] text-ink">
             computer science student @ Rice University creating at the intersection of technology, art, and people.
           </p>
-          <p className="text-[14px] text-brown">SOFTWARE ENGINEER</p>
+          <RoleTicker />
         </section>
 
         <nav aria-label="Primary" className="flex w-full flex-col lg:w-auto lg:shrink-0 xl:w-[528px]">

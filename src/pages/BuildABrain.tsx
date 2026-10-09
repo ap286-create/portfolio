@@ -127,15 +127,15 @@ export default function BuildABrain() {
 
       <MediaRow
         gapClass="gap-6"
-        heightClass="h-[260px] sm:h-[220px] lg:h-[360px]"
+        heightClass="aspect-[392/360]"
         items={[
           {
             caption: 'blender problems pt. 1',
-            render: <img src={blender1} alt="Blender brain environment, attempt one" className="absolute top-[-5.22%] left-0 h-[145.19%] w-full max-w-none" />,
+            render: <img src={blender1} alt="Blender brain environment, attempt one" className="size-full object-cover object-[50%_12%]" />,
           },
           {
             caption: 'blender problems pt. 2',
-            render: <img src={blender2} alt="Blender brain environment, attempt two" className="absolute top-[0.09%] left-[-21%] h-[99.9%] w-[121.05%] max-w-none" />,
+            render: <img src={blender2} alt="Blender brain environment, attempt two" className="size-full object-cover object-right" />,
           },
           { caption: 'brief roblox pivot', render: <img src={roblox} alt="Roblox prototype of the game" className="size-full object-cover" /> },
         ]}

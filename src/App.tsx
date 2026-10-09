@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, type ReactNode } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { MobileNavbar, SideNavbar } from './components/Navbar'
 import Home from './pages/Home'
@@ -8,6 +8,15 @@ import About from './pages/About'
 import BuildABrain from './pages/BuildABrain'
 import DmcCheckout from './pages/DmcCheckout'
 import Village from './pages/Village'
+
+function PageTransition({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation()
+  return (
+    <div key={pathname} className="animate-[page-in_300ms_ease-out]">
+      {children}
+    </div>
+  )
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -24,6 +33,7 @@ export default function App() {
       <SideNavbar />
       <div className="min-w-0 flex-1">
         <MobileNavbar />
+        <PageTransition>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/experience" element={<Experience />} />
@@ -34,6 +44,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </PageTransition>
       </div>
     </div>
   )

@@ -35,7 +35,7 @@ export function HoverName({ className = '', letterClassName = '' }: { className?
           <span
             key={i}
             aria-hidden
-            className={`inline-block origin-bottom transition-transform duration-300 ease-out hover:scale-[1.3] ${letterClassName}`}
+            className={`inline-block origin-bottom transition-transform duration-[600ms] ease-[cubic-bezier(.34,1.56,.64,1)] hover:scale-[1.3] ${letterClassName}`}
           >
             {ch}
           </span>

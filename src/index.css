@@ -110,6 +110,17 @@
     text-decoration-color 450ms ease !important;
 }
 
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -118,5 +129,6 @@
   *::before,
   *::after {
     transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
   }
 }

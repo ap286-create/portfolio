@@ -16,22 +16,28 @@ const ICONS = {
   mail: [mailLight, mailDark],
 } as const
 
-/** Live Houston time, shown in the navbar as "HTX 20:16:40". */
-function useHoustonTime() {
-  const format = () =>
-    new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'America/Chicago',
+/**
+ * Live clock in the visitor's own timezone (the browser knows it — no location
+ * permission needed), labelled with the zone's short name, e.g. "CDT 20:16:40".
+ */
+function useLocalTime() {
+  const format = () => {
+    const parts = new Intl.DateTimeFormat('en-US', {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
-      hour12: false,
-    }).format(new Date())
-  const [time, setTime] = useState(format)
+      hourCycle: 'h23',
+      timeZoneName: 'short',
+    }).formatToParts(new Date())
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? ''
+    return { zone: get('timeZoneName').toUpperCase(), time: `${get('hour')}:${get('minute')}:${get('second')}` }
+  }
+  const [now, setNow] = useState(format)
   useEffect(() => {
-    const id = window.setInterval(() => setTime(format()), 1000)
+    const id = window.setInterval(() => setNow(format()), 1000)
     return () => window.clearInterval(id)
   }, [])
-  return time
+  return now
 }
 
 function SocialLinks({ vertical }: { vertical?: boolean }) {
@@ -59,14 +65,14 @@ function SocialLinks({ vertical }: { vertical?: boolean }) {
 }
 
 function StudioInfo({ vertical }: { vertical?: boolean }) {
-  const time = useHoustonTime()
+  const { zone, time } = useLocalTime()
   const text = 'text-[11px] whitespace-nowrap text-brown dark:text-ink'
   if (vertical) {
     // Figma rotates these -90°, so they read bottom-to-top.
     return (
       <div className="flex flex-col items-center gap-5">
         <p className={`${text} rotate-180 [writing-mode:vertical-rl] tabular-nums`}>
-          HTX <time>{time}</time>
+          {zone} <time>{time}</time>
         </p>
         <p className={`${text} rotate-180 [writing-mode:vertical-rl]`}>© 2026 Abena Poku</p>
       </div>
@@ -76,7 +82,7 @@ function StudioInfo({ vertical }: { vertical?: boolean }) {
     <div className="flex items-center gap-5">
       <p className={text}>© 2026 Abena Poku</p>
       <p className={`${text} tabular-nums max-[380px]:hidden`}>
-        HTX <time>{time}</time>
+        {zone} <time>{time}</time>
       </p>
     </div>
   )

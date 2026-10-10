@@ -2,7 +2,7 @@
 export const SOCIAL_LINKS = [
   { key: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/abena-p' },
   { key: 'github', label: 'GitHub', href: 'https://github.com/ap286-create' },
-  { key: 'mail', label: 'Email', href: 'abena.poku@yahoo.com' },
+  { key: 'mail', label: 'Email', href: 'mailto:abena.poku@yahoo.com' },
 ] as const
 
 // From the Figma prototype's "resume hover" interaction.
